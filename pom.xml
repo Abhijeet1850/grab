@@ -1,0 +1,170 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.project</groupId>
+	<artifactId>grab</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Grab</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cucumber.version>4.2.3</cucumber.version>
+		<selenium-version>3.7.0</selenium-version>
+		<log4j-version>1.2.17</log4j-version>
+		<cucumber-jvm-deps-version>1.0.6</cucumber-jvm-deps-version>
+		<assertJ-version>3.6.2</assertJ-version>
+		<junit-version>4.12</junit-version>
+		<poi-version>3.17</poi-version>
+		<opencsv-version>4.1</opencsv-version>
+		<cassandra-driver-core-version>3.7.1</cassandra-driver-core-version>
+		<joda-time-version>2.9.1</joda-time-version>
+		<javax-mail-version>1.4.7</javax-mail-version>
+		<jsch-version>0.1.55</jsch-version>
+		<rest-assured-version>3.2.0</rest-assured-version>
+		<jackson-version>2.9.10.1</jackson-version>
+		<org-jsoup-version>1.11.2</org-jsoup-version>
+		<testng-version>6.9.10</testng-version>
+		<appium-version>7.3.0</appium-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.seleniumhq.selenium</groupId> <artifactId>selenium-java</artifactId> 
+			<version>${selenium-version}</version> </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-java -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-junit -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-jvm-deps -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-jvm-deps</artifactId>
+			<version>${cucumber-jvm-deps-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-testng -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-testng</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<!-- use 2.6.0 for Java 7 projects -->
+			<version>${assertJ-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>${appium-version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<testSource>1.8</testSource>
+					<testTarget>1.8</testTarget>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>Grab-qa-ui</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<source>1.8</source>
+							<target>1.8</target>
+							<testSource>1.8</testSource>
+							<testTarget>1.8</testTarget>
+							<encoding>UTF-8</encoding>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.21.0</version>
+						<configuration>
+							<redirectTestOutputToFile>false</redirectTestOutputToFile>
+							<systemPropertyVariables>
+								<service.url>https://www.demoblaze.com/index.html</service.url>
+								<environment>dev</environment>
+							</systemPropertyVariables>
+						</configuration>
+						<executions>
+							<execution>
+								<id>ui-test</id>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<phase>integration-test</phase>
+								<configuration>
+									<runOrder>alphabetical</runOrder>
+									<includes>
+										<include>**/ITRunCukes.java</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
